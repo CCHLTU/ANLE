@@ -1,0 +1,43 @@
+<!doctype html>
+<!--主頁面-->
+<html>
+<head>
+	<meta charset="utf-8">
+	<script src="js/mainjs.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
+	<script  src="js/bootstrap.js"></script>
+	<script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+	<script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
+	<script type="text/javascript" src="http://mybidrobot.allalla.com/jquery/jquery.ui.datepicker-zh-TW.js"></script>
+	<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
+	<title>ANLE管理</title>
+</head>
+<body>
+	<form action="issued.php" method="post">
+		<div style="text-align:left;width:100%;height:100%;margin:0 auto;">
+			<div style="text-align:center;width:300px;height:20%;margin:0 auto;">
+				<h1>發文篩選條件</h1><br>
+           </div>	
+				<p class="text-center"><input type="checkbox" name="allcheck"><label><font size="4">全部選取</font></label></p>
+
+                <p class="text-center"><input type="checkbox" name="hasspace"><label><font size="4">空白</font></label></th></p>
+
+                <p class="text-center"><input type="checkbox" name="notpay"><label><font size="4">年度未繳費</font></label></p>
+
+                <p class="text-center"><label><font size="4">墓基編號：</font></label><input type="text" name="base_idA" size="4" maxlength="3"><font size="4">區</font><input type="text" name="base_idB" size="3" maxlength="2"><font size="4">號之</font><input type="text" name="base_idC" size="3" maxlength="2"></p>
+                <p class="text-center"><label><font size="4">宗教：</font></label><input type="checkbox" name="Taoism"><font size="4">道教</font><input type="checkbox" name="Buddhism"><font size="4">佛教</font><input type="checkbox" name="Christian"><font size="4">基督教</font><input type="checkbox" name="Catholicism"><font size="4">天主教</font><input type="checkbox" name="other"><font size="4">其他</font></p>
+		</table>
+			
+			
+
+	<p class="text-center"><label><font size="5">訊息內容</font></label></p>
+			<div style="width:600px;height:80%;margin:0 auto;text-align:left;">
+				<textarea name="IN" rows="30" cols="84"></textarea><br/><br/>
+				<a href="index.html" class="btn btn-primary" role="button"><font size="5">回前頁</font></a>
+				<button type="submit" class="btn btn-success"><font size="5">送出</font></button>
+			</div>	
+		</div>
+	</form>
+</body>
+</html>
