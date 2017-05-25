@@ -16,7 +16,7 @@ include("connect.php");
 <form action="moneyiss.php" method="POST">
 	<input type="hidden" name="year" value="1">
 	<button class="btn btn-success" type="submit"><font size="5">年度收費金額</font></button>
-	<a href="creatiss.php" class="btn btn-success" role="button"><font size="5">收據表</font></a>
+	<a href="creatrece.php" class="btn btn-success" role="button"><font size="5">收據表</font></a>
 	<a href="creatallocation.php" class="btn btn-success" role="button"><font size="5">匯款單</font></a>
 	<a href="serverice.php" class="btn btn-success" role="button"><font size="5">收入項目整理</font></a>
 	<a href="index.html" class="btn btn-success" role="button"><font size="5">回首頁</font></a>

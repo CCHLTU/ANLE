@@ -15,7 +15,6 @@
 </head>
 <body>
 	<form action="selectbase.php" method="post">
-		
 		<a href="index.html" class="btn btn-primary" role="button"><font size=5>回前頁</font></a>
 		<button type="submit" class="btn btn-success"><font size=5>查詢資料</font></button><br>
 		<br>

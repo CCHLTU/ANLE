@@ -46,26 +46,31 @@ while($row=mysql_fetch_array($result)){
 	$rightuser=$row['rightuser'];
 	$price=$row['price'];
 	//信封表頭
-	$pdf->SetFont('edusongbig5', '', 16, '', true);
-	$pdf->SetXY(30.0,15.0);
-	$pdf->Write(5, $rightuser, '');
-	$pdf->SetXY(70.0,15.0);
-	$pdf->Write(5, '先生/小姐 啟', '');
-	$pdf->SetXY(150.0,30.0);
-	$pdf->Write(5, $roll_id, '');
-	$pdf->SetXY(30.0, 30.0);
-	$pdf->Write(5, $address, '');
-	$pdf->SetXY(150.0,35.0);
-	$pdf->Write(5, $newbase, '');
-	$pdf->SetXY(20.0, 40.0);
-	$pdf->Cell(180, 1, '', 'T', 2, 'L', false);
+    $pdf->SetFont('edusongbig5', '', 14, '', true);
+    $pdf->SetXY(27.0, 20.0);
+    $pdf->Write(5, $rightuser, '');
+    $pdf->SetFont('edusongbig5', '', 14, '', true);
+    $pdf->SetXY(90.0, 20.0);
+    $pdf->Write(5, '先生/小姐  啟', '');
+    $pdf->SetFont('edusongbig5', '', 12, '', true);
+    $pdf->SetXY(166.0, 35.0);
+    $pdf->Write(1, $roll_id ,'');
+    $pdf->SetFont('edusongbig5', '', 14, '', true);
+    $pdf->SetXY(27.0, 35.0);
+    $pdf->Write(5, $address, '');
+    $pdf->SetFont('edusongbig5', '', 12, '', true);
+    $pdf->SetXY(162.0, 45.0);
+    $pdf->Write(1, $newbase, '');
+    $pdf->SetFont('edusongbig5', '', 12, '', true);
+    $pdf->SetXY(20.0, 55.0);	
+    $pdf->Cell(170, 1, '', 'T', 2, 'L', false);
 	//輸入內容位置
 	$pdf->SetFont('edusongbig5', '', 16, '', true);
-	$pdf->SetXY(30.0,50.5);
-	$pdf->Write(5, '請持劃撥單至郵局劃撥若已現場繳費者，本單作廢', '');
 	$pdf->SetXY(30.0,58.5);
+	$pdf->Write(5, '請持劃撥單至郵局劃撥若已現場繳費者，本單作廢', '');
+	$pdf->SetXY(30.0,65.5);
 	$pdf->Write(5, '敬請清明節前利用劃撥繳費，避免現場繳費，久候費時', '');
-	$pdf->SetXY(30.0, 70.0);
+	$pdf->SetXY(30.0, 75.0);
 	$pdf->multicell(180, 1, $IN, 0,'L',0);
 	//$pdf->multicell(227, 1, $rollsave, 0,'L',0);
 	//沿線撕下
