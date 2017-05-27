@@ -49,11 +49,12 @@ if(empty($year)!=true){?>
 			<td style=height:1%;width:5%; align='left' valign=middle>單據編號</td>
 			<td style=height:1%;width:5%; align='left' valign=middle>日期</td>
 			<td style=height:1%;width:5%; align='left' valign=middle>收費方式</td>
-			<td style=height:1%;width:20%; align='left' valign=middle>摘要</td>
+			<td style=height:1%;width:19%; align='left' valign=middle>摘要</td>
 			<td style=height:1%;width:13.5%; align='left' valign=middle>應收金額</td>
 			<td style=height:1%;width:13.5%; align='left' valign=middle>實收金額</td>
 			<td style=height:1%;width:13.5%; align='left' valign=middle>折扣</td>
 			<td style=height:1%;width:13.5%; align='left' valign=middle>未收金額</td>
+			<td style=height:1%;width:5%; align='left' valign=middle></td>
 		</tr>
 		<?php
 		$moneysql="select * from servericespayindex where year='$year'";
@@ -64,14 +65,15 @@ if(empty($year)!=true){?>
 			echo "<td style=height:1%;width:5%; align='left' valign=middle> ". $moneyrow['indate'] ."</td>";
 			if($moneyrow['paytype']==1){$moneytype='收據';}if($moneyrow['paytype']==2){$moneytype='匯款單';}
 			echo "<td style=height:100%;width:5%; align='left' valign=middle> ". $moneytype ."</td>";
-			echo "<td style=height:100%;width:20%; align='left' valign=middle> ". $moneyrow['titleinput'] ."</td>";
+			echo "<td style=height:100%;width:19%; align='left' valign=middle> ". $moneyrow['titleinput'] ."</td>";
 			echo "<td style=height:100%;width:13.5%; align='left' valign=middle> ". $moneyrow['paidmoney'] ."</td>";
 			echo "<td style=height:100%;width:13.5%; align='left' valign=middle><input type=text name=yeapaid[] size=4 value=".$moneyrow['yeapaid']."></td>";
 			echo "<td style=height:100%;width:13.5%; align='left' valign=middle><input type=text name=notpaid[] size=4 value=".$moneyrow['notpaid']."></td>";
 			echo "<input type=hidden name=paynumber[] value=".$moneyrow['paynumber'].">";
 			echo "<input type=hidden name=base_id[] value=".$moneyrow['base_id'].">";
 			$unpaid=$moneyrow['paidmoney']-$moneyrow['yeapaid']-$moneyrow['notpaid'];
-			echo "<td style=height:100%;width:13.5%; align='left' valign=middle>".$unpaid."</td></tr>";  
+			echo "<td style=height:100%;width:13.5%; align='left' valign=middle>".$unpaid."</td>"; 
+			echo "<td style=height:100%;width:5%; align='left' valign=middle><form action=deletemoneyview.php method=post><input type=hidden name=delectnumber value=".$moneyrow['paynumber']."><button type=submit class='btn btn-danger'><font size=5>刪除</font></button></form></td></tr>";
 		}
 		mysql_free_result($result); //釋放記憶
 		?>

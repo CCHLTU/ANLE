@@ -38,7 +38,7 @@ foreach($_POST['notpaid'] as $value){//付款金額
 	$i++;
 }
 $paynumbercount=count($paynumber);
-echo $paynumbercount;
+//echo $paynumbercount;
 $payday=getToday();//繳費當天日期
 for($s=0;$s<$paynumbercount;$s++){
 	if(empty($paynumber[$s])!=true){
