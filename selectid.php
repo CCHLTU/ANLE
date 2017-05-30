@@ -32,24 +32,31 @@
 		$roll_id=$_POST['roll_id'];
 		if($roll_id!=null){
 			$sqlpay="select base_id FROM  roll_main where roll_id=$roll_id";
-			$resultpay=mysql_query($sqlpay);
-			while($rowpay=mysql_fetch_array($resultpay)){
-			$newbase=substr($rowpay['base_id'],0,3) ."區" . substr($rowpay['base_id'],4,2) ."號之". substr($rowpay['base_id'],7,2);
-			if($i%5 == 0){echo "<tr align=center>";}
-			echo "<td><label><form action=selectidview.php method=post><input type=hidden name=base_id value=".$rowpay['base_id']."><button type=submit class=btn btn-success><font size=5>".$newbase."</font></button></label></td>";
-			if($i%5 == 6){echo "</tr>";}
-			$i++;			
+			$resultpay=mysql_query($sqlpay);$rowpay=mysql_fetch_array($resultpay);
+			$have=empty($rowpay['0']);
+			$sql="select roll_id FROM  move_out where roll_id=$roll_id";
+			$result=mysql_query($sql);$row=mysql_fetch_array($result);
+			$havetwo=empty($row['0']);
+			if($have!=true){
+				$sqlpay="select base_id FROM  roll_main where roll_id=$roll_id";
+				$resultpay=mysql_query($sqlpay);
+				while($rowpay=mysql_fetch_array($resultpay)){
+					$newbase=substr($rowpay['base_id'],0,3) ."區" . substr($rowpay['base_id'],4,2) ."號之". substr($rowpay['base_id'],7,2);
+					if($i%5 == 0){echo "<tr align=center>";}
+					echo "<td><label><form action=selectidview.php method=post><input type=hidden name=base_id value=".$rowpay['base_id']."><button type=submit class=btn btn-success><font size=5>".$newbase."</font></button></label></td>";
+					if($i%5 == 6){echo "</tr>";}
+					$i++;
+				}			
+			}elseif($havetwo!=true) {
+				echo "<tr align=center><td><label><font size=5>已遷出</font></label></td></tr>";
+			}else{
+				echo "<tr align=center><td><label><font size=5>無此墓籍編號</font></label></td></tr>";
 			}
-			if($newbase==null)
-			{
-			echo "<tr align=center><td><label><font size=5>已遷出</font></label></td></tr>";
-			}
-		
-		}
 		/*	$sql="select base_id from roll_main where roll_id=".$row['roll_id'];
 			$result=mysql_query($sql);
 			$row=mysql_fetch_array($result);
 			$base_id=$row['base_id'];*/
+		}
 		?>
 	</table>
 </body>

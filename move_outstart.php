@@ -7,8 +7,8 @@ $pricesql="select * from price_index where base_id='".$base_id."'";$priceresult=
 $rollrow=mysql_fetch_array($rollresult);
 $pricerow=mysql_fetch_array($priceresult);
 if(empty($rollrow) != true and empty($pricerow) != true){
-	$roll_id=$rollrow['roll_id'];$area=$rollrow['area'];$rightuser=$rollrow['rightuser'];$username=$rollrow['username'];$relationship=$rollrow['relationship'];$faith=$rollrow['faith'];$startday=$rollrow['startday'];$type=$rollrow['type'];$phone=$rollrow['phone'];$address=$rollrow['address'];$price=$pricerow['price'];
-	$insetmoveout="insert into move_out(roll_id,area,rightuser,username,relationship,faith,startday,type,phone,address,price,moveday) value($roll_id,$area,'$rightuser','$username','$relationship','$faith','$startday','$type','$phone','$address',$price,'$moveday')";
+	$roll_id=$rollrow['roll_id'];$base_id=$rollrow['base_id'];$area=$rollrow['area'];$rightuser=$rollrow['rightuser'];$username=$rollrow['username'];$relationship=$rollrow['relationship'];$faith=$rollrow['faith'];$startday=$rollrow['startday'];$type=$rollrow['type'];$phone=$rollrow['phone'];$address=$rollrow['address'];$price=$pricerow['price'];
+	$insetmoveout="insert into move_out(roll_id,base_id,area,rightuser,username,relationship,faith,startday,type,phone,address,price,moveday) value($roll_id,'$base_id',$area,'$rightuser','$username','$relationship','$faith','$startday','$type','$phone','$address',$price,'$moveday')";
 	$insetmoveoutresult=mysql_query($insetmoveout) or die(mysql_error());
 	echo $base_id;
 	$delroll="delete from roll_main where base_id='".$base_id."'";

@@ -23,8 +23,8 @@ $tb_names="test";
 $PATHTOMYSQLDUMP = "C:/wamp64/bin/mysql/mysql5.7.14/bin/"; // 程式mysqldump的路徑所在
 $HOSTNAME="test";
 $DIRNAME= "C:/"; // 要備份到那個路徑，以下都不要管！
+$dateset=date( "Ymd"); // add date identifier
 /*
-$DIRNAME.=date( "Ymd"); // add date identifier
 $DIRNAME.= "/"; // add trailing slash
 */
 //***************************************************************************
@@ -64,8 +64,8 @@ $i++;
 //***************************************************************************
 // Loop through the table names, and do the dump.
 //***************************************************************************
-echo $PATHTOMYSQLDUMP. "mysqldump -h".$MYSQL_SERVER. " -u".$MYSQL_USER. " -p".$MYSQL_PASSWD. " ".$tb_names. " > ".$DIRNAME.$tb_names. ".sql";
-$COMMAND_DO=$PATHTOMYSQLDUMP. "mysqldump -h".$MYSQL_SERVER. " -u".$MYSQL_USER. " -p".$MYSQL_PASSWD. " ".$tb_names. " > ".$DIRNAME.$tb_names. ".sql";
+echo $PATHTOMYSQLDUMP. "mysqldump -h".$MYSQL_SERVER. " -u".$MYSQL_USER. " -p".$MYSQL_PASSWD. " ".$tb_names. " > ".$DIRNAME.$dateset.$tb_names. ".sql";
+$COMMAND_DO=$PATHTOMYSQLDUMP. "mysqldump -h".$MYSQL_SERVER. " -u".$MYSQL_USER. " -p".$MYSQL_PASSWD. " ".$tb_names. " > ".$DIRNAME.$dateset.$tb_names. ".sql";
 //echo $COMMAND_DO."\n"; // uncomment these lines if you want to see all
 //flush(); // back-ups made on the server
 exec($COMMAND_DO); // execute each backup

@@ -127,6 +127,8 @@ while($row=mysql_fetch_array($result)){
 		$pdf->SetXY(60.0, 220.0);
 		$pdf->Write(1, $address, '');
 	}
+	$pdf->SetXY(0.0,270.5);
+	$pdf->Cell(227, 1, '', 'B', 2, 'L', false);
 }
 // ---------------------------------------------------------
 // Close and output PDF document

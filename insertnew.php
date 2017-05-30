@@ -15,9 +15,9 @@
 	<title>新增墓籍資料</title>
 </head>
 <body>
+	<form action="insertdata.php" method="post">
 		<a href="index.html" class="btn btn-primary" role="button" ><font size="5">回前頁</font></a>
 		<button type="submit" class="btn btn-success"><font size="5">新增資料</font></button>
-	<form action="insertdata.php" method="post">
 		<table border="0" style="width:80%;" class="table table-striped" align="center">
 			<colgroup>
       			<col style="width:20%">
@@ -46,9 +46,12 @@
 			<td><font size="4">啟用日期</font></tb><td><input type="text" name="startday" size="25"></td><td><pre><font size="4">範例：民國88年08月08日 辰</font></pre></td><td></td></tr>
 			<tr>
 			<td><font size="4">宗教信仰</font></tb><td><input type="text" name="faith" size="10"></td>
-			<td><font size="4">存放方式</font></td><td><select name="usetype"><option value="大體"><font size="4">大體</font><option value="骨骸"><font size="4">骨骸</font><option value="骨灰"><font size="4">骨灰</font><option value="其他"><font size="4">其他</font></select></td></tr>
+			<td><font size="4">存放方式</font></td><td><select name="usetype"><option value="大體"><font size="4">大體</font><option value="骨骸"><font size="4">骨骸</font><option value="骨灰"><font size="4">骨灰</font><option value="其他"><font size="4">其他</font></select></td>
+			<tr>
+			<td><font size="4">第二聯絡人</font></tb><td><input type="text" name="rightuser2" size="25"></td><td><font size="4">電話</font></td><td><input type="text" name="phone2" size="10"></td></tr>
+			<tr>
+			<td><font size="4">地址</font></tb><td><input type="text" name="address2" size="25"></td><td><pre><font size="4">範例：407台中市南屯區嶺東路1號</font></pre></td><td></td></tr>
 		</table>
-
 	</form>
 </body>
 </html>
