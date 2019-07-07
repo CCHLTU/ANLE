@@ -18,7 +18,7 @@ class PDF_report1 extends TCPDF
     }
     // Colored table
     public function ColoredTable() {
-        $header = array('墓籍編號', '墓基編號','面積', '使用權人姓名', '使用者姓名','使用情況');
+        $header = array('墓籍編號', '墓基編號', '使用權人', '聯絡人二','遷出備註');
         // Colors, line width and bold font
     	$this->SetFillColor(255, 0, 0);
     	$this->SetTextColor(0);
@@ -26,7 +26,7 @@ class PDF_report1 extends TCPDF
     	$this->SetLineWidth(0.4);
     	$this->SetFont('', 'B');
         // Header
-        $w = array(25,45,15,40,35,30);//表格欄數為6並設定欄位寬度
+        $w = array(30,50,30,30,50);//表格欄數為6並設定欄位寬度
         $num_headers = count($header);
         for($i = 0; $i < $num_headers; ++$i) {
         	$this->Cell($w[$i], 7, $header[$i], 'B', 0, 'C', 0);
@@ -37,59 +37,30 @@ class PDF_report1 extends TCPDF
         $this->SetTextColor(0);
         $this->SetFont('');
         $i=0;
-        // Data 列出墓籍編號及相關資料
         $fill = 0;//true為不透明 false為透明
-        $sql="SELECT roll_id FROM roll_main WHERE (rightuser NOT IN ('待查','空')) ORDER BY roll_id ASC";
+        // Data 列出墓籍編號及相關資料
+        $sql="select base_id,roll_id,rightuser,rightuser2,null as moveday from roll_main WHERE (rightuser NOT IN ('待查','空')) and (roll_id NOT IN (0)) union select base_id,roll_id,rightuser,null,moveday from move_out order by roll_id ASC";
         $result=mysql_query($sql);
-        while ($row=mysql_fetch_array($result)) {
-            $a[$i]=$row['roll_id'];
-            $i++;
-        }
-        $sql="SELECT roll_id FROM move_out";
-        $result=mysql_query($sql);
-        while ($row=mysql_fetch_array($result)) {
-            $a[$i]=$row['roll_id'];
-            $i++;
-        }
-        sort($a);
-        $s=count($a);
-        $over=0;
-        while($over<$s){
-            $sql="SELECT * FROM  roll_main WHERE roll_id=".$a[$over];
-            $result=mysql_query($sql);
-            $row=mysql_fetch_array($result);
-            $sql="SELECT * FROM  move_out WHERE roll_id=".$a[$over];
-            $result=mysql_query($sql);
-            $aarow=mysql_fetch_array($result);
-            if(empty($row)!=true){
-                $roll_id=$row['roll_id'];
-                $base_id=$row['base_id'];
-                $newbase=substr($base_id,0,3) ."區" . substr($base_id,4,2) ."號之". substr($base_id,7,2);//更換格式100-01-00-->100區01號之00
-                $area=$row['area'];
-                $rightuser=$row['rightuser'];
-                $username=$row['username'];                
-            }else {
-                $roll_id=$aarow['roll_id'];
-                $newbase='已遷出';//更換格式100-01-00-->100區01號之00
-                $area=$aarow['area'];
-                $rightuser=$aarow['rightuser'];
-                $username=$aarow['username'];
-            }
-        	$this->Cell($w[0], 6, $roll_id, 0, 0, 'C', $fill);
-        	$this->Cell($w[1], 6, $newbase, 0, 0, 'R', $fill);
-        	$this->Cell($w[2], 6, $area, 0, 0, 'R', $fill);
-        	$this->Cell($w[3], 6, $rightuser, 0, 0, 'L', $fill);
-        	$this->Cell($w[4], 6, $username, 0, 0, 'L', $fill);
-        	$this->Cell($w[5], 6, '', 0, 0, 'R', $fill);
+        while($row=mysql_fetch_array($result)){
+            $roll_id=$row['roll_id'];
+            $base_id=$row['base_id'];
+            $newbase=substr($base_id,0,3) ."區" . substr($base_id,4,2) ."號之". substr($base_id,7,2);//更換格式100-01-00-->100區01號之00
+            $rightuser=$row['rightuser'];
+            $rightuser2=$row['rightuser2'];
+            $mark=$row['moveday'];
+        	$this->Cell($w[0], 6, $roll_id, 'BL', 0, 'C', $fill);
+        	$this->Cell($w[1], 6, $newbase, 'BL', 0, 'C', $fill);
+        	$this->Cell($w[2], 6, $rightuser, 'BL', 0, 'C', $fill);
+        	$this->Cell($w[3], 6, $rightuser2, 'BL', 0, 'C', $fill);
+            $this->Cell($w[4], 6, $mark, 'BL', 0, 'L', $fill);
         	$this->Ln();//換行
-            if(($this->getPageHeight()-$this->getY())<($this->getBreakMargin()+5)){
+            if(($this->getPageHeight()-$this->getY())<($this->getBreakMargin()+1)){
                 $this->AddPage();
                 for($i = 0; $i < $num_headers; ++$i) {
                     $this->Cell($w[$i], 7, $header[$i], 'B', 0, 'C', 0);
                 }
             $this->Ln();
            }
-           $over++;
         }
     }
 }
@@ -103,7 +74,7 @@ $pdf->SetKeywords('TCPDF, PDF, example, test, guide');
 // set default font subsetting mode
 $pdf->setFontSubsetting(true);
 // set font 文字(繁體中文) UTF-8
-$pdf->SetFont('msungstdlight', '', 16);
+$pdf->SetFont('msungstdlight', '', 18);
 // set default header data 頁首文字設定
 $pdf->setPrintHeader(false);
 // set header and footer fonts 頁首.尾字型設定

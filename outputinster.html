@@ -1,0 +1,52 @@
+<?php include("connect.php");header("Content-type: text/html; charset=utf-8"); ?>
+<!doctype html>
+<!--新增遷出資料頁面-->
+<html>
+<head>
+    <meta charset="utf-8">
+    <script src="js/mainjs.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
+    <script  src="js/bootstrap.js"></script>
+    <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+    <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
+    <script type="text/javascript" src="http://mybidrobot.allalla.com/jquery/jquery.ui.datepicker-zh-TW.js"></script>
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css"/>
+    <title>新增遷出資料</title>
+</head>
+<body>
+    <form action="insertoutput.php" method="post">
+        <a href="outputview.php" class="btn btn-primary" role="button" ><font size="5">回前頁</font></a>
+        <button type="submit" class="btn btn-success"><font size="5">新增遷出資料</font></button>
+        <table border="0" style="width:80%;" class="table table-striped" align="center">
+            <colgroup>
+                <col style="width:20%">
+                <col style="width:30%">
+                <col style="width:20%">
+                <col style="width:30%">
+            </colgroup>
+            <tr>
+            <td><font size="4">墓籍編號</font></tb><td><input type="text" style="font-size:16px" name="roll_id" size="10"></td>
+            <td><font size="4">墓基編號</font></td><td><input type="text" style="font-size:16px" name="base_idA" size="4" maxlength="3"><font size="4">區</font><input type="text" style="font-size:16px" name="base_idB" size="3" maxlength="2"><font size="4">號之</font><input type="text" style="font-size:16px" name="base_idC" size="3" maxlength="2"></td></tr>
+            <tr>
+            <td><font size="4">面積</font></td><td><input type="text" style="font-size:16px" name="area" size="10"></td>
+            <td><font size="4">遷出日期</font></td><td><input type="text" style="font-size:16px" name="moveday" size="10"></td>
+            </tr>
+            <tr>
+            <td><font size="4">使用權人姓名</font></tb><td><input type="text" style="font-size:16px" name="rightuser" size="10"></td>
+            <td><font size="4">使用人姓名</font></td><td><input type="text" style="font-size:16px" name="username" size="30"></td></tr>
+            <tr>
+            <td><font size="4">關係</font></tb><td><input type="text" style="font-size:16px" name="relationship" size="10"></td>
+            <td><font size="4">收費標準</font></td><td><input type="text" style="font-size:16px" name="price" size="10"></td></tr>
+            <tr>
+            <td><font size="4">電話</font></tb><td><input type="text" style="font-size:16px" name="phone" size="30"></td></tr>
+            <tr>
+            <td><font size="4">地址</font></tb><td><input type="text" name="address" size="50" style="font-size:16px" ></td><td><font size="4">啟用日期</font></tb><td><font size="4">民國</font><input type="text" style="font-size:16px" name="startYY" size="4" maxlength="3"><font size="4">年</font><input type="text" style="font-size:16px" name="startMM" size="3" maxlength="2"><font size="4">月</font><input type="text" style="font-size:16px" name="startDD" size="3" maxlength="2"><font size="4">日</font>
+            <select name="startTT"><option value="子"><font size="4">子</font><option value="丑"><font size="4">丑</font><option value="寅"><font size="4">寅</font><option value="卯"><font size="4">卯</font><option value="辰"><font size="4">辰</font><option value="巳"><font size="4">巳</font><option value="午"><font size="4">午</font><option value="未"><font size="4">未</font><option value="申"><font size="4">申</font><option value="酉"><font size="4">酉</font><option value="戌"><font size="4">戌</font><option value="亥"><font size="4">亥</font></select></td>
+            </tr>
+            <td><font size="4">宗教信仰</font></tb><td><select name="faith"><option value="道教"><font size="4">道教</font><option value="佛教"><font size="4">佛教</font><option value="基督教"><font size="4">基督教</font><option value="天主教"><font size="4">天主教</font><option value="其他"><font size="4">其他</font></select></td>
+            <td><font size="4">存放方式</font></td><td><select name="usetype"><option value="大體"><font size="4">大體</font><option value="骨骸"><font size="4">骨骸</font><option value="骨灰"><font size="4">骨灰</font><option value="其他"><font size="4">其他</font></select></td>
+        </table>
+    </form>
+</body>
+</html>

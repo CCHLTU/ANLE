@@ -5,12 +5,6 @@ set_time_limit(0);//增加執行時間限制
 ini_set('memory_limit', '1024M');//增加記憶體限制
 include("connect.php");
 $year=$_POST['year'];
-$ch = curl_init();
-curl_setopt($ch, CURLOPT_URL, 'http://localhost/ANLETEST/merage_receipt.php');
-curl_setopt($ch, CURLOPT_HEADER, false);
-curl_setopt($ch, CURLOPT_POST,1);
-curl_setopt($ch, CURLOPT_POSTFIELDS, "year=$year");
-curl_exec($ch);
 header("Content-type: text/html; charset=utf-8");
 require_once ('lib/tcpdf/tcpdf.php');
 require_once('lib/tcpdf/config/lang/eng.php');
@@ -43,7 +37,7 @@ $pdf->setPrintHeader(false);
 $pdf->setPrintFooter(false);
 $i=1;
 $countnumber=0;
-$countid="SELECT * FROM  merage_receipt";
+$countid="SELECT roll_main.*,price_index.price FROM roll_main,price_index where roll_main.base_id=price_index.base_id and (roll_main.rightuser NOT IN ('待查','空','已使用','遷出','未使用')) and (roll_main.base_id not in (SELECT B.base_id FROM pay_index B where B.year='".$year."'))";
 $countresult=mysql_query($countid);
 while($row1=mysql_fetch_array($countresult)){
 	if($row1['roll_id'] != 0 and $row1['price'] != 0){
@@ -51,7 +45,7 @@ while($row1=mysql_fetch_array($countresult)){
 	}
 }
 //搜尋條件為去除使用權人為待查及空的資料
-$sql="SELECT * FROM  merage_receipt";
+$sql="SELECT roll_main.*,price_index.price FROM roll_main,price_index where roll_main.base_id=price_index.base_id and (roll_main.rightuser NOT IN ('待查','空','已使用','遷出','未使用')) and (roll_main.base_id not in (SELECT B.base_id FROM pay_index B where B.year='".$year."')) order by roll_main.base_id";
 $result=mysql_query($sql);
 while($row=mysql_fetch_array($result)){
 	if($row['roll_id'] != 0 and $row['price'] != 0){
@@ -76,8 +70,20 @@ while($row=mysql_fetch_array($result)){
     $pdf->SetXY(166.0, 35.0);
     $pdf->Write(1, $roll_id ,'');
     $pdf->SetFont('edusongbig5', '', 14, '', true);
+    $counteraddress=mb_strlen($address,'utf-8');
+    if($counteraddress>20){
+        $pdf->SetXY(27.0, 35.0);$aa=mb_substr($address,0,20,"utf-8");
+        $pdf->Write(1, $aa, '');
+        $pdf->SetXY(27.0, 40.0);$aa=mb_substr($address,20,$length=null,"utf-8");
+        $pdf->Write(1, $aa , '');
+    }else{
+        $pdf->SetXY(27.0, 35.0);
+        $pdf->Write(1, $address, '');
+    }
+    /*
     $pdf->SetXY(27.0, 35.0);
     $pdf->Write(5, $address, '');
+    */
     $pdf->SetFont('edusongbig5', '', 12, '', true);
     $pdf->SetXY(162.0, 45.0);
     $pdf->Write(1, $newbase, '');
@@ -93,7 +99,7 @@ while($row=mysql_fetch_array($result)){
     $pdf->Write(5, '墓籍編號：'. $roll_id, '');
     $pdf->SetFont('edusongbig5', '', 14, '', true);
     $pdf->SetXY(105.0, 64.0);
-    $pdf->Write(5, '墓基編號：' . $newbase, '');	
+    $pdf->Write(5, '墓基編號：' . $newbase, '');
     $pdf->SetFont('edusongbig5', '', 14, '', true);
     $pdf->SetXY(170.0, 64.0);
     $pdf->Write(5, '面積：' . $area, '');
@@ -114,11 +120,10 @@ while($row=mysql_fetch_array($result)){
     $pdf->Write(5, '起訖日期：', '');
     $pdf->SetFont('edusongbig5', '', 10, '', true);
     $pdf->SetXY(62.0, 94.0);
-    $year=getToday();
     $pdf->Write(5, '民國 '.$year.' 年 4 月 5 日起', '');
     $pdf->SetFont('edusongbig5', '', 10, '', true);
     $pdf->SetXY(62.0, 99.0);
-    $nextyear=nextyear();
+    $nextyear=$year+1;
     $pdf->Write(5, '民國 '.$nextyear.' 年 4 月 4 日止', '');
     $pdf->SetXY(20.0, 105.0);	
     $pdf->Cell(170, 1, '', 'T', 2, 'L', false);
@@ -170,10 +175,13 @@ while($row=mysql_fetch_array($result)){
     //憑證
     $pdf->SetFont('edusongbig5', '', 18, '', true);
     $pdf->SetXY(22.0, 180.0);
-    $pdf->Write(5, '清水安樂公園化示範墓園服務處代辦各別環境美化費憑證', '');
+    $pdf->Write(5, '安樂公園化示範墓園服務處代辦各別環境美化費憑證', '');
     $pdf->SetFont('edusongbig5', '', 14, '', true);
     $pdf->SetXY(23.0, 190.0);
-    $pdf->Write(5, '服務電話: (04)26200033 0903995568　郵政劃撥帳號 02485819戶名　楊得辛', '');
+    $sersql="select * from services";
+    $serresult=mysql_query($sersql);
+    $serrow=mysql_fetch_array($serresult);
+    $pdf->Write(5, '服務電話:'.$serrow['serverphone'].' '.$serrow['serverphone2'].'郵政劃撥帳號'.$serrow['servermoney'].'戶名'.$serrow['servername'], '');
     $pdf->SetXY(23.0, 200.0);
     $pdf->Cell(160, 70, '', '1', 2, 'L', false);
     $pdf->SetFont('edusongbig5', '', 12, '', true);
@@ -231,18 +239,29 @@ while($row=mysql_fetch_array($result)){
 	$resultmark=mysql_query($sqlmark);
 	$rowmark=mysql_fetch_array($resultmark);
 	if($rowmark!=null){
-    	$pdf->SetXY(24.0, 265.0);
-    	$pdf->Write(5, '特別備註：'.$rowmark['spremarks'], '');		
-	}
+    	$pdf->SetXY(23.0, 265.0);
+        $pdf->Cell(160, 1, '', 'T', 2, 'L', false);//收費備註上邊線
+        $pdf->SetXY(24.0, 265.0);
+    	$pdf->Write(5, '收費備註：'.$rowmark['spremarks'], '');
+        $pdf->SetXY(53.0, 220.0);
+        $pdf->Cell(1, 45, '', 'L', 2, 'T', false);//坪位左邊線
+        $pdf->SetXY(81.0, 220.0);
+        $pdf->Cell(1, 45, '', 'L', 2, 'T', false);//金額左邊線
+        $pdf->SetXY(112.0, 220.0);
+        $pdf->Cell(1, 45, '', 'L', 2, 'T', false);//備註左邊線
+	}else{
+        $pdf->SetXY(53.0, 220.0);
+        $pdf->Cell(1, 50, '', 'L', 2, 'T', false);//坪位左邊線
+        $pdf->SetXY(81.0, 220.0);
+        $pdf->Cell(1, 50, '', 'L', 2, 'T', false);//金額左邊線
+        $pdf->SetXY(112.0, 220.0);
+        $pdf->Cell(1, 50, '', 'L', 2, 'T', false);//備註左邊線
+    }
     $pdf->SetXY(24.0, 271.0);
-    $pdf->Write(5, '(本憑單收費及塗改須另加簽章後生效)　　承　辦　人：楊　得　辛　　出　納：', '');
+    $pdf->Write(5, '(本憑單收費及塗改須另加簽章後生效)　　承　辦　人：'.$serrow['servername'].' 出　納：', '');
 
-    $pdf->SetXY(53.0, 220.0);	 
-    $pdf->Cell(1, 50, '', 'L', 2, 'T', false);	
-    $pdf->SetXY(81.0, 220.0);	 
-    $pdf->Cell(1, 50, '', 'L', 2, 'T', false);	
-    $pdf->SetXY(112.0, 220.0);	 
-    $pdf->Cell(1, 50, '', 'L', 2, 'T', false);}
+    
+    }
 }
 // ---------------------------------------------------------
 // Close and output PDF document

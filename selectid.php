@@ -11,7 +11,7 @@
 	<script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
 	<script type="text/javascript" src="http://mybidrobot.allalla.com/jquery/jquery.ui.datepicker-zh-TW.js"></script>
 	<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
-	<title>ANLE管理</title>
+	<title>墓籍查詢</title>
 </head>
 <body>
 	<form action="selectid.php" method="post">		
@@ -43,7 +43,7 @@
 				while($rowpay=mysql_fetch_array($resultpay)){
 					$newbase=substr($rowpay['base_id'],0,3) ."區" . substr($rowpay['base_id'],4,2) ."號之". substr($rowpay['base_id'],7,2);
 					if($i%5 == 0){echo "<tr align=center>";}
-					echo "<td><label><form action=selectidview.php method=post><input type=hidden name=base_id value=".$rowpay['base_id']."><button type=submit class=btn btn-success><font size=5>".$newbase."</font></button></label></td>";
+					echo "<td><label><form action=selectidview.php method=post><input type=hidden name=base_id value=".$rowpay['base_id']."><button type=submit class=btn btn-success><font size=5>".$newbase."</font></button><input type=hidden name=chang value=1><input type=hidden name=roll_id value=".$roll_id."></form></label></td>";
 					if($i%5 == 6){echo "</tr>";}
 					$i++;
 				}			

@@ -29,7 +29,7 @@ class PDF_report1 extends TCPDF
     }
     // Colored table
     public function ColoredTable() {
-        $header = array('墓基編號', '使用權人','面積', '費用', '收費日期','收費1','收費2','特殊備註');
+        $header = array('墓基編號', '使用權人','面積', '費用', '收費日期','收費1','收費2','收費備註');
         // Colors, line width and bold font
         $this->SetFillColor(255, 0, 0);
         $this->SetTextColor(0);
@@ -37,7 +37,7 @@ class PDF_report1 extends TCPDF
         $this->SetLineWidth(0.4);
         $this->SetFont('');
         // Header
-        $w = array(30,40,5,20,24,23,23,20);//表格欄數為8並設定欄位寬度
+        $w = array(30,40,5,20,22,20,20,28);//表格欄數為8並設定欄位寬度
         $num_headers = count($header);
         for($i = 0; $i < $num_headers; ++$i) {
         	$this->Cell($w[$i], 7, $header[$i], 'B', 0, 'C', 0);
@@ -47,12 +47,13 @@ class PDF_report1 extends TCPDF
         $this->SetFillColor(225, 255, 255);
         $this->SetTextColor(0);
         $this->SetFont('');
-        $this->HeaderData(101);//第一頁頁首墓籍標記
+        $sqlzone="SELECT * FROM  roll_main ORDER BY base_id ASC";$resultzone=mysql_query($sqlzone);$rowzone=mysql_fetch_array($resultzone);
+        $this->HeaderData($rowzone['zone_number']);//第一頁頁首墓籍標記
         $newtag='';
-        $oldtag='101';//第一頁區碼為101
+        $oldtag=$rowzone['zone_number'];//第一頁區碼為004
         // Data 列出墓籍編號及相關資料
         $fill = 0;//true為不透明 false為透明
-        $sql="SELECT roll_main.*,price_index.price FROM  roll_main,price_index where roll_main.base_id=price_index.base_id";
+        $sql="SELECT roll_main.*,price_index.price FROM  roll_main,price_index where roll_main.base_id=price_index.base_id order by roll_main.base_id ASC";
         $result=mysql_query($sql);
         while($row=mysql_fetch_array($result)){
             $newtag=$row['zone_number'];
@@ -61,6 +62,10 @@ class PDF_report1 extends TCPDF
         	$area=$row['area'];
         	$rightuser=$row['rightuser'];
             $price=$row['price'];
+            $sqlmark="SELECT * FROM  mark_main where base_id='".$base_id."'";
+            $resultsqlmark=mysql_query($sqlmark);
+            $rowmark=mysql_fetch_array($resultsqlmark);
+            $spremarks=$rowmark['spremarks'];
             $this->SetFont('msungstdlight', '', 13);
             if($oldtag != $newtag){
                 $oldtag=$newtag;
@@ -70,7 +75,7 @@ class PDF_report1 extends TCPDF
                    $this->Cell($w[$i], 7, $header[$i], 'B', 0, 'C', 0);
                }$this->Ln();
                $this->HeaderData($base_id);
-               if($rightuser=='空' or $rightuser ==''){$rightuser='';$area='';$price='';}
+               if($rightuser=='空' or $rightuser ==''){$rightuser='';}
                $this->Cell($w[0], 8, $newbase, 'B', 0, 'C', $fill);
                $this->Cell($w[1], 8, $rightuser, 'B', 0, 'C', $fill);
                if($area==0.1){
@@ -82,10 +87,10 @@ class PDF_report1 extends TCPDF
             $this->Cell($w[4], 8, '', 'BL', 0, 'L', $fill);
             $this->Cell($w[5], 8, '', 'BL', 0, 'R', $fill);
             $this->Cell($w[6], 8, '', 'BL', 0, 'L', $fill);
-            $this->Cell($w[7], 8, '', 'BL', 0, 'R', $fill);
+            $this->Cell($w[7], 8, $spremarks, 'BL', 0, 'L', $fill);
             $this->Ln();//換行
         }else{
-            if($rightuser=='空' or $rightuser ==''){$rightuser='';$area='';$price='';}
+            if($rightuser=='空' or $rightuser ==''){$rightuser='';}
             $this->Cell($w[0], 8, $newbase, 'B', 0, 'C', $fill);
             $this->Cell($w[1], 8, $rightuser, 'B', 0, 'C', $fill);
             if($area==0.1){
@@ -97,7 +102,7 @@ class PDF_report1 extends TCPDF
             $this->Cell($w[4], 8, '', 'BL', 0, 'L', $fill);
             $this->Cell($w[5], 8, '', 'BL', 0, 'R', $fill);
             $this->Cell($w[6], 8, '', 'BL', 0, 'L', $fill);
-            $this->Cell($w[7], 8, '', 'BL', 0, 'R', $fill);
+            $this->Cell($w[7], 8, $spremarks, 'BL', 0, 'L', $fill);
             $this->Ln();//換行
             if(($this->getPageHeight()-$this->getY())<($this->getBreakMargin()+6)){
                 $this->AddPage();
@@ -117,8 +122,8 @@ public function HeaderData($newtag)
     $sqlzone="SELECT * FROM  zone_name where zone_number='".substr($newtag,0,1)."'";
     $resultzone=mysql_query($sqlzone);
     $rowzone=mysql_fetch_array($resultzone);
-    $this->setXY(170.0,0.5);$this->Write(5, $rowzone['zone_chinese']." ".$newtag."區", '');
-    $this->Ln();$this->Ln();$this->Ln();$this->Ln();$this->Ln();$this->Ln();
+    $this->setXY(175.0,11.0);$this->Write(5, $rowzone['zone_chinese']." ".$newtag."區", '');
+    $this->Ln();$this->Ln();$this->Ln();$this->Ln();
 }
 }
 $pdf = new PDF_report1('P','mm','A4', true, 'UTF-8', false);

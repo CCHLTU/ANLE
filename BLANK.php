@@ -8,6 +8,7 @@ header("Content-type: text/html; charset=utf-8");
 require_once ('lib/tcpdf/tcpdf.php');
 require_once('lib/tcpdf/config/lang/eng.php');
 // create new PDF document
+$year=$_POST['year'];
 $pdf = new TCPDF('P','mm','A4', true, 'UTF-8', false);
 // ---------------------------------------------------------
 // Set font
@@ -85,11 +86,10 @@ $pdf->setPrintFooter(false);
     $pdf->Write(5, '起訖日期：', '');
     $pdf->SetFont('edusongbig5', '', 10, '', true);
     $pdf->SetXY(62.0, 89.0);
-    $year=getToday();
     $pdf->Write(5, '民國 '.$year.' 年 4 月 5 日起', '');
     $pdf->SetFont('edusongbig5', '', 10, '', true);
     $pdf->SetXY(62.0, 94.0);
-    $nextyear=nextyear();
+    $nextyear=$year+1;
     $pdf->Write(5, '民國 '.$nextyear.' 年 4 月 4 日止', '');
     $pdf->SetXY(20.0, 105.0);	
     $pdf->Cell(170, 1, '', 'T', 2, 'L', false);
@@ -141,10 +141,13 @@ $pdf->setPrintFooter(false);
     //憑證
     $pdf->SetFont('edusongbig5', '', 18, '', true);
     $pdf->SetXY(22.0, 180.0);
-    $pdf->Write(5, '清水安樂公園化示範墓園服務處代辦各別環境美化費憑證', '');
+    $pdf->Write(5, '安樂公園化示範墓園服務處代辦各別環境美化費憑證', '');
     $pdf->SetFont('edusongbig5', '', 14, '', true);
     $pdf->SetXY(23.0, 190.0);
-    $pdf->Write(5, '服務電話: (04)26200033 0903995568　郵政劃撥帳號 02485819戶名　楊得辛', '');
+    $sersql="select * from services";
+    $serresult=mysql_query($sersql);
+    $serrow=mysql_fetch_array($serresult);
+    $pdf->Write(5, '服務電話:'.$serrow['serverphone'].' '.$serrow['serverphone2'].'郵政劃撥帳號'.$serrow['servermoney'].'戶名'.$serrow['servername'], '');
     $pdf->SetXY(23.0, 200.0);
     $pdf->Cell(160, 70, '', '1', 2, 'L', false);
     $pdf->SetFont('edusongbig5', '', 12, '', true);
@@ -163,10 +166,10 @@ $pdf->setPrintFooter(false);
     $pdf->Write(5, '起訖日期：', '');
     $pdf->SetFont('edusongbig5', '', 10, '', true);
     $pdf->SetXY(46.0, 214.0);
-    $pdf->Write(5, '民國 '.' '.' 年 4 月 5 日起', '');
+    $pdf->Write(5, '民國 '.$year.' 年 4 月 5 日起', '');
     $pdf->SetFont('edusongbig5', '', 10, '', true);
     $pdf->SetXY(90.0, 214.0);
-    $pdf->Write(5,  '民國 '.' '.' 年 4 月 4 日止', '');	
+    $pdf->Write(5,  '民國 '.$nextyear.' 年 4 月 4 日止', '');	
     $pdf->SetXY(23.0, 220.0);	 
     $pdf->Cell(160, 1, '', 'T', 2, 'L', false);	
     $pdf->SetFont('edusongbig5', '', 14, '', true);
@@ -199,18 +202,20 @@ $pdf->setPrintFooter(false);
     $pdf->Write(5, '至服務處填寫申請書辦理資料變更', '');
     $pdf->SetFont('edusongbig5', '', 10, '', true);
 	
-    	$pdf->SetXY(24.0, 265.0);
-    	$pdf->Write(5, '特別備註：'.' ', '');		
+    $pdf->SetXY(23.0, 265.0);
+    $pdf->Cell(160, 1, '', 'T', 2, 'L', false);//收費備註上邊線
+    $pdf->SetXY(24.0, 265.0);
+    $pdf->Write(5, '收費備註：'.' ', '');
 
     $pdf->SetXY(24.0, 271.0);
-    $pdf->Write(5, '(本憑單收費及塗改須另加簽章後生效)　　承　辦　人：楊　得　辛　　出　納：', '');
+    $pdf->Write(5, '(本憑單收費及塗改須另加簽章後生效)　　承　辦　人：'.$serrow['servername'].' 出　納：', '');
 
-    $pdf->SetXY(53.0, 220.0);	 
-    $pdf->Cell(1, 50, '', 'L', 2, 'T', false);	
-    $pdf->SetXY(81.0, 220.0);	 
-    $pdf->Cell(1, 50, '', 'L', 2, 'T', false);	
-    $pdf->SetXY(112.0, 220.0);	 
-    $pdf->Cell(1, 50, '', 'L', 2, 'T', false);
+    $pdf->SetXY(53.0, 220.0);
+    $pdf->Cell(1, 45, '', 'L', 2, 'T', false);//坪位左邊線
+    $pdf->SetXY(81.0, 220.0);
+    $pdf->Cell(1, 45, '', 'L', 2, 'T', false);//金額左邊線
+    $pdf->SetXY(112.0, 220.0);
+    $pdf->Cell(1, 45, '', 'L', 2, 'T', false);//備註左邊線
 // ---------------------------------------------------------
 // Close and output PDF document
 // This method has several options, check the source code documentation for more information.
